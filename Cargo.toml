@@ -1,0 +1,21 @@
+[workspace]
+
+members = [
+    "echo",
+    "generate_event",
+    # keep "deploy_sc" after "generate_event" as the latter embeds the former's binary
+    "deploy_sc",
+]
+
+[profile.release]
+lto = true
+opt-level = "z"
+strip = true
+#debug = true
+#strip = "debuginfo"
+#strip = true
+
+[profile.dev]
+lto = true
+opt-level = "z"
+strip = true

@@ -1,0 +1,75 @@
+[env]
+BUILD_TARGET = "wasm32-unknown-unknown"
+
+[tasks.format]
+install_crate = "rustfmt"
+command = "cargo"
+args = ["fmt", "--", "--emit=files"]
+
+[tasks.clean]
+command = "cargo"
+args = ["clean"]
+
+# Remove exported wasm a.k.a. .wasm_add
+# may need cargo install fd-find
+[tasks.clean-extra]
+command = "fd"
+args = ["-e", "wasm_add", "--exec", "rm"]
+
+[tasks.clippy]
+command = "cargo"
+args = ["clippy", "--target", "${BUILD_TARGET}"]
+
+[tasks.build]
+# dependencies = ["clippy"]
+command = "cargo"
+args = ["build", "--target", "${BUILD_TARGET}"]
+
+[tasks.inspect]
+dependencies = ["build"]
+command = "wasmer"
+args = [
+    "inspect",
+    "${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/${BUILD_TARGET}/debug/${CARGO_MAKE_CRATE_FS_NAME}.wasm",
+]
+
+[tasks.strip]
+dependencies = ["build"]
+command = "wasm-strip"
+args = [
+    "${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/${BUILD_TARGET}/debug/${CARGO_MAKE_CRATE_FS_NAME}.wasm",
+]
+
+[tasks.export]
+dependencies = ["build"]
+# check if "echo -n -e \\x01 | cat - file.wasm > file.wasm_add" does the same and is portable
+command = "wasmv1_transform"
+args = [
+    "${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/${BUILD_TARGET}/debug/${CARGO_MAKE_CRATE_FS_NAME}.wasm",
+    "add",
+]
+
+[tasks.list-wasm]
+workspace = false
+script = '''
+echo "** wasmv1 files:"
+find . -name "*.wasm_add" -exec ls -lh {} \;
+echo ""
+'''
+
+[tasks.wasm]
+dependencies = [
+    "clean-extra",
+    "build",
+    #"test",
+    "strip",
+    "inspect",
+    "export",
+]
+run_task = "list-wasm"
+
+## Dunno why this takes so long when `cargo test --lib` on the command line
+## is fast
+[tasks.test]
+command = "cargo"
+args = ["test", "--lib"]
