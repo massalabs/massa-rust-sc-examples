@@ -1,10 +1,10 @@
 [workspace]
 
 members = [
-    "echo",
-    "generate_event",
     # keep "deploy_sc" after "generate_event" as the latter embeds the former's binary
     "deploy_sc",
+    "echo",
+    "generate_event",
 ]
 
 [profile.release]

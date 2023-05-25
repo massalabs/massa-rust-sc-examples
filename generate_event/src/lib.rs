@@ -7,6 +7,7 @@
 // Imports from massa-rust-sc-sdk
 // ****************************************************************************
 use massa_rust_sc_sdk as sdk;
+
 // as we are in a no_std environment, the sdk redefined the allocators for
 // default containers, use 'use sdk::*' to get them
 use sdk::*;

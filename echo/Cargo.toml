@@ -9,19 +9,11 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-massa-rust-sc-sdk = { path = "../../massa-rust-sc-sdk" }
-anyhow = { version = "1.0.70", default-features = false }
-prost = { version = "0.11.8", default-features = false, features = [
-    "prost-derive",
-] } # specify the exact version to ensure determinism
-prost-types = { version = "0.11.8", default-features = false }
+massa_rust_sc_sdk = { path = "../../massa-rust-sc-sdk" }
 
 [build-dependencies]
 prost-build = "0.11.8" # specify exact version to ensure determinism
 glob = "0.3.1"
-
-# [dev-dependencies]
-# massa-rust-sc-sdk = { path = "../../massa-rust-sc-sdk", features = ["testing"] }
 
 [features]
 prost-build = []

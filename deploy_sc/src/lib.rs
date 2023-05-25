@@ -7,7 +7,7 @@
 // Imports from massa-rust-sc-sdk
 // ****************************************************************************
 use massa_rust_sc_sdk as sdk;
-// as we are in a no_std environment, the sdk redifined the allocators for
+// as we are in a no_std environment, the sdk redefined the allocators for
 // default containers, use 'use sdk::*' to get them
 use sdk::*;
 // Imports what is needed from the SDK
@@ -19,8 +19,6 @@ use sdk::abis::{call, create_sc, generate_event, log, transfer_coins};
 // ****************************************************************************
 
 fn create_contract() -> Result<String, String> {
-    // const bytes: StaticArray<u8> =
-    // fileToByteArray("./build/release.wasm_add");
     let module = include_bytes!(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../target/wasm32-unknown-unknown/debug/massa_rust_sc_generate_event.wasm_add"
@@ -33,7 +31,7 @@ fn create_contract() -> Result<String, String> {
 
     log("Will transfer coins: 100_000_000_000".to_owned());
     transfer_coins(sc_address.clone(), 100);
-    log("Coins transfered".to_owned());
+    log("Coins transferred".to_owned());
 
     Ok(sc_address)
 }
