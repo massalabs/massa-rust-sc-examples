@@ -11,14 +11,16 @@ use massa_rust_sc_sdk as sdk;
 // default containers, use 'use sdk::*' to get them
 use sdk::*;
 // Imports what is needed from the SDK
-use sdk::abis::{call, create_sc, generate_event, log, transfer_coins};
+use sdk::abis::{
+    call, create_sc, generate_event, log, transfer_coins, Address, Amount,
+};
 // ****************************************************************************
 
 // ****************************************************************************
 // Simple Smart Contract that generate an event
 // ****************************************************************************
 
-fn create_contract() -> Result<String, String> {
+fn create_contract() -> Result<Address, String> {
     let module = include_bytes!(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../target/wasm32-unknown-unknown/debug/massa_rust_sc_generate_event.wasm_add"
@@ -27,10 +29,10 @@ fn create_contract() -> Result<String, String> {
     log("calling create_sc".to_owned());
     let sc_address = create_sc(module)?;
 
-    log("SC created @:".to_string() + &sc_address);
+    log("SC created @:".to_string() + &sc_address.address);
 
     log("Will transfer coins: 100_000_000_000".to_owned());
-    transfer_coins(sc_address.clone(), 100);
+    transfer_coins(sc_address.clone(), Amount { amount: 100 });
     log("Coins transferred".to_owned());
 
     Ok(sc_address)
@@ -46,11 +48,11 @@ fn main(_args: u32) -> u32 {
                 sc_address.clone(),
                 "call_generate_event".to_owned(),
                 Vec::new(),
-                0,
+                Amount { amount: 0 },
             );
             generate_event(
                 "Created a Protobuffed smart-contract at:".to_string()
-                    + &sc_address,
+                    + &sc_address.address,
             );
         }
         Err(e) => {
