@@ -3,7 +3,7 @@
 members = [
     # keep "deploy_sc" after "generate_event" as the latter embeds the former's binary
     "deploy_sc",
-    "echo",
+    # "echo",
     "generate_event",
 ]
 
