@@ -10,8 +10,8 @@ license = "MIT"
 
 [workspace.dependencies]
 # Pinned to a revision of the SDK repository; bump both lines together.
-massa-sc-sdk = { git = "https://github.com/massalabs/massa-rust-sc-sdk.git", rev = "97304a1f8910d5c8eab695f4f8131a11528ebbcb" }
-massa-sc-standards = { git = "https://github.com/massalabs/massa-rust-sc-sdk.git", rev = "97304a1f8910d5c8eab695f4f8131a11528ebbcb" }
+massa-sc-sdk = { git = "https://github.com/massalabs/massa-rust-sc-sdk.git", rev = "ee71280687292e39ee71873867350a7227b7933d" }
+massa-sc-standards = { git = "https://github.com/massalabs/massa-rust-sc-sdk.git", rev = "ee71280687292e39ee71873867350a7227b7933d" }
 
 # Small, gas-efficient wasm (see massa-rust-sc-sdk/docs/size-and-gas.md).
 [profile.release]

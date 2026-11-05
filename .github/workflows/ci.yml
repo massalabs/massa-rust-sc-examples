@@ -22,7 +22,8 @@ jobs:
       - run: cargo clippy --workspace --all-targets -- -D warnings
       - run: cargo test --workspace
       - run: cargo install --git https://github.com/massalabs/massa-rust-sc-sdk cargo-massa massa-sc-runner
-      - run: cargo massa build --no-wasm-opt
+      - run: cargo massa build --no-wasm-opt -p hello-world -p counter -p token -p nft -p multi-token -p vault -p autonomous -p deployer -p crypto --network any
+      - run: cargo massa build --no-wasm-opt -p clayer-mimc --network clayer
       - name: run the modules in the Massa runtime
         run: |
           massa-sc-runner build/hello_world.wasm main \; constructor --deploy \; hello --args s:CI --quiet
