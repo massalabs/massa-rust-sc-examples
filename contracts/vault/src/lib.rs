@@ -85,15 +85,19 @@ pub fn balance_of(mut args: Args) -> U256 {
 }
 
 /// `spawn_counter(initial: u64) -> string`: deploys the embedded counter,
-/// funds it with the coins sent along, calls its constructor and remembers it.
+/// calls its constructor and remembers it. The coins sent with the call pay
+/// the child's storage ([`contract::deploy_cost`], about 2 MAS on Massa);
+/// whatever remains is given to the child.
 #[export]
 pub fn spawn_counter(mut args: Args) -> Address {
     let initial: u64 = args.next().unwrap_or(0);
+    let cost = contract::deploy_cost(COUNTER_WASM.len());
+    let sent = context::transferred_coins();
+    assert!(sent >= cost, "send at least {cost} nanoMAS to pay the child's storage");
     let child = contract::create_sc(COUNTER_WASM);
     // The vault has write access to the child during this execution only.
-    let coins_for_child = context::transferred_coins();
-    if coins_for_child > 0 {
-        coins::transfer_coins(&child, coins_for_child);
+    if sent > cost {
+        coins::transfer_coins(&child, sent - cost);
     }
     contract::call(&child, "constructor", Args::new().add(initial).add(1u64), 0);
     storage::set_value(CHILD_KEY, &child);
@@ -173,8 +177,16 @@ mod tests {
             "get" => Some(0u64.to_le_bytes().to_vec()),
             _ => None,
         });
+        // Not enough coins to pay the child's storage: rejected.
+        mock::set_transferred_coins(1);
+        assert!(std::panic::catch_unwind(|| spawn_counter(Args::new().add(0u64))).is_err());
+        let cost = contract::deploy_cost(COUNTER_WASM.len());
+        let vault = context::callee();
+        mock::set_transferred_coins(cost + 7);
+        mock::set_balance(&vault, mock::balance_of(&vault) + cost + 7);
         let child = spawn_counter(Args::new().add(0u64));
         assert!(child.as_str().starts_with("AS"));
+        assert_eq!(mock::balance_of(&child), 7, "surplus forwarded to the child");
         assert_eq!(contract::get_bytecode_of(&child), COUNTER_WASM);
         assert_eq!(bump_counter(), 1);
         assert_eq!(peek_counter(), 0);

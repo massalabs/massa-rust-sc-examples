@@ -17,8 +17,9 @@ console.log(`token balance of vault: ${await mrc20.balanceOf(vault.address)}`);
 await call(vault, 'withdraw', new Args().addU256(100n), Mas.fromString('0.05'));
 console.log(`token balance of me: ${await mrc20.balanceOf(me)}`);
 
-// The vault creates a child contract from the bytecode it embeds (a Rust contract deploying a Rust contract).
-await call(vault, 'spawn_counter', new Args().addU64(40n), Mas.fromString('0.5'));
+// The vault creates a child contract from the bytecode it embeds (a Rust contract deploying a Rust
+// contract). The coins pay the child's storage (0.0001 MAS per byte, about 2 MAS); the rest is forwarded.
+await call(vault, 'spawn_counter', new Args().addU64(40n), Mas.fromString('2.5'));
 await call(vault, 'bump_counter');
 console.log(`child counter (via the vault): ${U64.fromBytes((await read(vault, 'bump_counter')).value)}`);
 console.log(`local_call of the child's get in the vault's context: ${U64.fromBytes((await read(vault, 'peek_counter')).value)}`);
