@@ -30,7 +30,9 @@ cargo massa build                   # build/*.wasm, optimized and validated for 
 ```
 
 `cargo massa build` prints, for each module, its size, imports, entry points
-and any reason a node would reject it. Modules land in `build/`.
+and any reason a node would reject it. Modules land in `build/`. Add
+`--network massa` (or `clayer`, `any`) to fail on imports the target network
+lacks: every example but `clayer-mimc` passes `--network any`.
 
 Run a module locally in the real Massa engine without a node:
 
@@ -67,8 +69,19 @@ JSON_RPC_URL=http://127.0.0.1:23035 PRIVATE_KEY=S1... npm run clayer-mimc
 ```
 
 Every other example runs there too (same ABI); the sandbox has 0.5 s slots,
-so things are fast. Note that C-Layer nodes do not expose the MIP-0002
-paginated key ABIs yet: `cargo massa build` warns when a module imports them.
+so things are fast. C-Layer nodes do not expose the MIP-0002 paginated-key
+ABIs yet: none of the examples uses them, and `cargo massa build --network
+clayer` fails if a contract does.
+
+## Interoperability with AssemblyScript contracts
+
+These contracts speak the same `Args`, follow the same conventions and, for
+the standards, use the same storage layouts as their AssemblyScript
+counterparts: an AssemblyScript dApp or contract calls them unchanged, and
+they call AssemblyScript contracts unchanged (the `vault` example drives any
+MRC20, Rust or AssemblyScript). The SDK repository ships a
+[cross-SDK test suite](https://github.com/massalabs/massa-rust-sc-sdk/blob/main/docs/interop.md)
+that runs both implementations together in the Massa runtime.
 
 ## Layout
 

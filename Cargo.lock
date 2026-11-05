@@ -172,7 +172,7 @@ checksum = "65cd87c9a6d60536580b316ad985726104730a5151c99845f2490428ef91240a"
 [[package]]
 name = "massa-sc-sdk"
 version = "0.2.0"
-source = "git+https://github.com/massalabs/massa-rust-sc-sdk.git?rev=97304a1f8910d5c8eab695f4f8131a11528ebbcb#97304a1f8910d5c8eab695f4f8131a11528ebbcb"
+source = "git+https://github.com/massalabs/massa-rust-sc-sdk.git?rev=ee71280687292e39ee71873867350a7227b7933d#ee71280687292e39ee71873867350a7227b7933d"
 dependencies = [
  "blake3",
  "ethnum",
@@ -184,7 +184,7 @@ dependencies = [
 [[package]]
 name = "massa-sc-sdk-macros"
 version = "0.2.0"
-source = "git+https://github.com/massalabs/massa-rust-sc-sdk.git?rev=97304a1f8910d5c8eab695f4f8131a11528ebbcb#97304a1f8910d5c8eab695f4f8131a11528ebbcb"
+source = "git+https://github.com/massalabs/massa-rust-sc-sdk.git?rev=ee71280687292e39ee71873867350a7227b7933d#ee71280687292e39ee71873867350a7227b7933d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -194,7 +194,7 @@ dependencies = [
 [[package]]
 name = "massa-sc-standards"
 version = "0.2.0"
-source = "git+https://github.com/massalabs/massa-rust-sc-sdk.git?rev=97304a1f8910d5c8eab695f4f8131a11528ebbcb#97304a1f8910d5c8eab695f4f8131a11528ebbcb"
+source = "git+https://github.com/massalabs/massa-rust-sc-sdk.git?rev=ee71280687292e39ee71873867350a7227b7933d#ee71280687292e39ee71873867350a7227b7933d"
 dependencies = [
  "massa-sc-sdk",
 ]
