@@ -1,21 +1,23 @@
 [workspace]
+resolver = "2"
+members = ["contracts/*"]
 
-members = [
-    "echo",
-    "generate_event",
-    # keep "deploy_sc" after "generate_event" as the latter embeds the former's binary
-    "deploy_sc",
-]
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+publish = false
+license = "MIT"
 
+[workspace.dependencies]
+# Pin to a tag or revision of the SDK repository in your own projects.
+massa-sc-sdk = { path = "../massa-rust-sc-sdk/massa-sc-sdk" }
+massa-sc-standards = { path = "../massa-rust-sc-sdk/massa-sc-standards" }
+
+# Small, gas-efficient wasm (see massa-rust-sc-sdk/docs/size-and-gas.md).
 [profile.release]
-lto = true
-opt-level = "z"
+opt-level = "s"
+lto = "fat"
+codegen-units = 1
+panic = "abort"
 strip = true
-#debug = true
-#strip = "debuginfo"
-#strip = true
-
-[profile.dev]
-lto = true
-opt-level = "z"
-strip = true
+overflow-checks = true

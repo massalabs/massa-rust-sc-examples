@@ -1,0 +1,14 @@
+[package]
+name = "token"
+description = "MRC20 fungible token (mintable, burnable, ownable) built with massa-sc-standards"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+massa-sc-sdk = { workspace = true }
+massa-sc-standards = { workspace = true }

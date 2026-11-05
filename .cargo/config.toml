@@ -1,2 +1,8 @@
-# [build]
-# target = "wasm32-unknown-unknown"
+# `cargo massa build` is the recommended way to build every contract.
+# `cargo wasm -p <contract>` is the plain-cargo equivalent (no wasm-opt, no checks).
+# `cargo test` runs the unit tests natively against the SDK mock VM.
+[alias]
+wasm = "build --release --target wasm32v1-none"
+
+[target.wasm32v1-none]
+rustflags = ["-C", "target-feature=+bulk-memory,+sign-ext", "-C", "link-arg=-zstack-size=262144"]
