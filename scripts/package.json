@@ -1,0 +1,28 @@
+{
+  "name": "massa-rust-sc-examples-scripts",
+  "private": true,
+  "type": "module",
+  "description": "Deploy and interact with the Rust example contracts using massa-web3",
+  "scripts": {
+    "hello": "tsx src/hello.ts",
+    "counter": "tsx src/counter.ts",
+    "token": "tsx src/token.ts",
+    "nft": "tsx src/nft.ts",
+    "multi-token": "tsx src/multi-token.ts",
+    "vault": "tsx src/vault.ts",
+    "autonomous": "tsx src/autonomous.ts",
+    "deployer": "tsx src/deployer.ts",
+    "crypto": "tsx src/crypto.ts",
+    "clayer-mimc": "tsx src/clayer-mimc.ts",
+    "all": "npm run hello && npm run counter && npm run token && npm run nft && npm run multi-token && npm run vault && npm run autonomous && npm run deployer && npm run crypto"
+  },
+  "dependencies": {
+    "@massalabs/massa-web3": "^5",
+    "dotenv": "^16"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4",
+    "typescript": "^5"
+  }
+}

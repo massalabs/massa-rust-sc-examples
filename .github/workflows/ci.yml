@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+          targets: wasm32v1-none
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo test --workspace
+      - run: cargo install --git https://github.com/massalabs/massa-rust-sc-sdk cargo-massa massa-sc-runner
+      - run: cargo massa build --no-wasm-opt
+      - name: run the modules in the Massa runtime
+        run: |
+          massa-sc-runner build/hello_world.wasm main \; constructor --deploy \; hello --args s:CI --quiet
+          massa-sc-runner build/counter.wasm constructor --args u64:10,u64:5 --deploy \; increment \; get --quiet
+          massa-sc-runner build/token.wasm constructor --args "s:T,s:T,u8:9,u256:1000" --deploy \; balanceOf --args "addr:AU1dQZLc618t4CNYWYiDnFnq585kifefr1EAcMi5jddJZGQJXJXL" --quiet
+          massa-sc-runner build/deployer.wasm --opds "hex:00=args:u64:1" --opds "args:u64:1=@build/counter.wasm" main --quiet
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: cd scripts && npm ci && npx tsc --noEmit
